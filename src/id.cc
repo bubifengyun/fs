@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#ifndef __WIN32
+#if !defined(__WIN32) && !defined(__ANDROID__)
 #include <grp.h>
 #include <pwd.h>
 #include <sys/types.h>
@@ -14,7 +14,7 @@
 extern "C" SEXP fs_getpwnam_(SEXP name_sxp) {
   SEXP out = PROTECT(Rf_allocVector(INTSXP, Rf_xlength(name_sxp)));
 
-#ifndef __WIN32
+#if !defined(__WIN32) && !defined(__ANDROID__)
   int* out_p = INTEGER(out);
   for (R_xlen_t i = 0; i < Rf_xlength(name_sxp); ++i) {
     passwd* pwd;
@@ -35,7 +35,7 @@ extern "C" SEXP fs_getpwnam_(SEXP name_sxp) {
 extern "C" SEXP fs_getgrnam_(SEXP name_sxp) {
   SEXP out = PROTECT(Rf_allocVector(INTSXP, Rf_xlength(name_sxp)));
 
-#ifndef __WIN32
+#if !defined(__WIN32) && !defined(__ANDROID__)
   int* out_p = INTEGER(out);
   for (R_xlen_t i = 0; i < Rf_xlength(name_sxp); ++i) {
     group* grp;
@@ -58,7 +58,7 @@ extern "C" SEXP fs_groups_() {
   BEGIN_CPP
   std::vector<std::string> names;
   std::vector<int> ids;
-#ifndef __WIN32
+#if !defined(__WIN32) && !defined(__ANDROID__)
   group* grp = getgrent();
   while (grp != NULL) {
     names.push_back(grp->gr_name);
@@ -105,7 +105,7 @@ extern "C" SEXP fs_users_() {
   BEGIN_CPP
   std::vector<std::string> names;
   std::vector<int> ids;
-#ifndef __WIN32
+#if !defined(__WIN32) && !defined(__ANDROID__)
   passwd* pwd = getpwent();
   while (pwd != NULL) {
     names.push_back(pwd->pw_name);
